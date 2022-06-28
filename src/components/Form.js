@@ -6,7 +6,7 @@ class Form extends React.Component {
     const {
       cardName, cardDescription, cardAttr1, cardAttr2, cardAttr3,
       cardImage, cardRare, cardTrunfo, isSaveButtonDisabled,
-      /* hasTrunfo, */ onInputChange, onSaveButtonClick,
+      /* hasTrunfo, */ onInputChange, onSaveButtonClick, InfoValidate,
     } = this.props;
     return (
       <form className="forms">
@@ -18,7 +18,7 @@ class Form extends React.Component {
             id="name-input"
             name="cardName"
             value={ cardName }
-            onChange={ onInputChange }
+            onChange={ (event) => { onInputChange(event, InfoValidate); } }
           />
         </label>
 
@@ -29,7 +29,7 @@ class Form extends React.Component {
             id="description-inpu"
             name="cardDescription"
             value={ cardDescription }
-            onChange={ onInputChange }
+            onChange={ (event) => { onInputChange(event, InfoValidate); } }
           >
             Apenas algum texto em uma área de texto
           </textarea>
@@ -43,7 +43,7 @@ class Form extends React.Component {
             id="attr1-input"
             name="cardAttr1"
             value={ cardAttr1 }
-            onChange={ onInputChange }
+            onChange={ (event) => { onInputChange(event, InfoValidate); } }
           />
         </label>
 
@@ -55,7 +55,7 @@ class Form extends React.Component {
             id="attr2-input"
             name="cardAttr2"
             value={ cardAttr2 }
-            onChange={ onInputChange }
+            onChange={ (event) => { onInputChange(event, InfoValidate); } }
           />
         </label>
 
@@ -67,7 +67,7 @@ class Form extends React.Component {
             id="attr3-input"
             name="cardAttr3"
             value={ cardAttr3 }
-            onChange={ onInputChange }
+            onChange={ (event) => { onInputChange(event, InfoValidate); } }
           />
         </label>
 
@@ -79,7 +79,7 @@ class Form extends React.Component {
             id="image-input"
             name="cardImage"
             value={ cardImage }
-            onChange={ onInputChange }
+            onChange={ (event) => { onInputChange(event, InfoValidate); } }
           />
         </label>
 
@@ -92,7 +92,7 @@ class Form extends React.Component {
             id="rare-input"
             name="cardRare"
             value={ cardRare }
-            onChange={ onInputChange }
+            onChange={ (event) => { onInputChange(event, InfoValidate); } }
           >
             <option value="normal">normal</option>
             <option value="raro">raro</option>
@@ -109,7 +109,8 @@ class Form extends React.Component {
             name="cardTrunfo"
             value={ cardTrunfo }
             checked={ cardTrunfo }
-            onChange={ onInputChange }
+            // chamo uma callback passa o evento do click chamo minha funçao onInputChange q lida com o estado recebendo o evento da callbak + funçao q lida com a validaçao do formulario
+            onChange={ (event) => { onInputChange(event, InfoValidate); } }
           />
         </label>
 
@@ -143,6 +144,7 @@ Form.propTypes = {
   isSaveButtonDisabled: PropTypes.bool.isRequired,
   onInputChange: PropTypes.func.isRequired,
   onSaveButtonClick: PropTypes.func.isRequired,
+  InfoValidate: PropTypes.func.isRequired,
 };
 
 export default Form;

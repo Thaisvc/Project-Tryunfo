@@ -16,17 +16,41 @@ class App extends React.Component {
       cardRare: 'normal',
       cardTrunfo: false,
       hasTrunfo: false,
-      isSaveButtonDisabled: false,
+      isSaveButtonDisabled: true,
     };
+    this.onInputChange = this.onInputChange.bind(this);
+    this.checkedForms = this.checkedForms.bind(this);
   }
 
-  onInputChange = ({ target }) => {
+  onInputChange = ({ target }, InfoValidate) => {
     const { name } = target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
 
     this.setState({
-      [name]: value,
-    });
+      [name]: value },
+    () => InfoValidate());
+  }
+
+  checkedForms() {
+    const {
+      cardName, cardDescription, cardAttr1,
+      cardAttr2, cardAttr3, cardImage,
+    } = this.state;
+
+    const Value = 90;
+    const sum = 210;
+
+    const conditions = [
+      cardName.length > 0,
+      cardDescription.length > 0,
+      cardImage.length > 0,
+      cardAttr1 >= 0 && cardAttr1 <= Value,
+      cardAttr2 >= 0 && cardAttr2 <= Value,
+      cardAttr3 >= 0 && cardAttr3 <= Value,
+      Number(cardAttr1) + Number(cardAttr2) + Number(cardAttr3) <= sum,
+    ];
+    // https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Array/every
+    this.setState({ isSaveButtonDisabled: !conditions.every((condition) => condition) });
   }
 
   render() {
@@ -41,7 +65,7 @@ class App extends React.Component {
       hasTrunfo,
       isSaveButtonDisabled } = this.state;
     return (
-      <div>
+      <>
         <h1>Tryunfo</h1>
         <Form
           onSaveButtonClick={ this.callback }
@@ -56,8 +80,8 @@ class App extends React.Component {
           hasTrunfo={ hasTrunfo }
           cardTrunfo={ cardTrunfo }
           isSaveButtonDisabled={ isSaveButtonDisabled }
+          InfoValidate={ this.checkedForms }
         />
-
         <Card
           cardName={ cardName }
           cardDescription={ cardDescription }
@@ -68,7 +92,7 @@ class App extends React.Component {
           cardRare={ cardRare }
           cardTrunfo={ cardTrunfo }
         />
-      </div>
+      </>
     );
   }
 }
