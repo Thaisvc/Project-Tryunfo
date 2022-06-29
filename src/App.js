@@ -26,7 +26,6 @@ class App extends React.Component {
     this.onInputChange = this.onInputChange.bind(this);
     this.onSaveButtonClick = this.onSaveButtonClick.bind(this);
     this.validateCard = this.validateCard.bind(this);
-    this.removeCard = this.removeCard.bind(this);
   }
 
   onInputChange({ target }) {
@@ -76,16 +75,6 @@ class App extends React.Component {
     this.setState({ isSaveButtonDisabled: !conditions.every((con) => con) });
   }
 
-  removeCard({ target }) {
-    const { cardCollection } = this.state;
-    this.setState({
-      cardCollection: cardCollection
-        .filter(({ cardName }) => cardName !== target.id),
-      hasTrunfo: !cardCollection
-        .find(({ cardName }) => cardName === target.id).cardTrunfo,
-    });
-  }
-
   render() {
     const { cardCollection } = this.state;
     return (
@@ -101,17 +90,7 @@ class App extends React.Component {
         </div>
         <div className="cards-list">
           { cardCollection.map((card) => (
-            <div key={ card.cardName } className="card">
-              <Card { ...card } />
-              <button
-                id={ card.cardName }
-                type="button"
-                data-testid="delete-button"
-                onClick={ this.removeCard }
-              >
-                Excluir
-              </button>
-            </div>
+            <Card key={ card.cardName } { ...card } />
           ))}
         </div>
       </div>
