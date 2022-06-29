@@ -2,7 +2,7 @@ import React from 'react';
 import Form from './components/Form';
 import Card from './components/Card';
 
-const INITIAL_STATE = {
+const stadeInicial = {
   cardName: '',
   cardDescription: '',
   cardAttr1: '0',
@@ -18,7 +18,7 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      ...INITIAL_STATE,
+      ...stadeInicial,
       hasTrunfo: false,
       cardCollection: [],
     };
@@ -51,7 +51,7 @@ class App extends React.Component {
     };
     if (!hasTrunfo) this.setState({ hasTrunfo: cardTrunfo });
     this.setState((prevState) => ({
-      ...INITIAL_STATE,
+      ...stadeInicial,
       cardCollection: [...prevState.cardCollection, cardInfo],
     }));
   }
