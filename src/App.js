@@ -3,14 +3,14 @@ import Form from './components/Form';
 import Card from './components/Card';
 
 const INITIAL_STATE = {
-  name: '',
-  description: '',
-  attr1: '0',
-  attr2: '0',
-  attr3: '0',
-  image: '',
-  rare: 'normal',
-  trunfo: false,
+  cardName: '',
+  cardDescription: '',
+  cardAttr1: '0',
+  cardAttr2: '0',
+  cardAttr3: '0',
+  cardImage: '',
+  cardRare: 'normal',
+  cardTrunfo: false,
   isSaveButtonDisabled: true,
 };
 
@@ -19,65 +19,79 @@ class App extends React.Component {
     super();
     this.state = {
       ...INITIAL_STATE,
+      hasTrunfo: false,
       cardCollection: [],
     };
 
     this.onInputChange = this.onInputChange.bind(this);
     this.onSaveButtonClick = this.onSaveButtonClick.bind(this);
-    this.checkCardInformations = this.checkCardInformations.bind(this);
+    this.validateCard = this.validateCard.bind(this);
   }
 
-  onInputChange({ target }, validateInfo) {
+  onInputChange({ target }) {
     const { name } = target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
-    this.setState({ [name]: value }, () => validateInfo());
+    this.setState({ [name]: value }, () => this.validateCard());
   }
 
   onSaveButtonClick() {
     const {
-      name, description, attr1,
-      attr2, attr3, image, trunfo,
+      cardName, cardDescription, cardAttr1, cardAttr2,
+      cardAttr3, cardImage, cardRare, cardTrunfo, hasTrunfo,
     } = this.state;
     const cardInfo = {
-      name, description, attr1, attr2, attr3, image, trunfo,
+      cardName,
+      cardDescription,
+      cardAttr1,
+      cardAttr2,
+      cardAttr3,
+      cardImage,
+      cardRare,
+      cardTrunfo,
     };
+    if (!hasTrunfo) this.setState({ hasTrunfo: cardTrunfo });
     this.setState((prevState) => ({
       ...INITIAL_STATE,
       cardCollection: [...prevState.cardCollection, cardInfo],
     }));
   }
 
-  checkCardInformations() {
+  validateCard() {
     const {
-      name, description, attr1,
-      attr2, attr3, image,
+      cardName, cardDescription, cardImage,
+      cardAttr1, cardAttr2, cardAttr3,
     } = this.state;
     const maxValue = 90;
     const maxSum = 210;
     const conditions = [
-      name.length > 0,
-      description.length > 0,
-      image.length > 0,
-      attr1 >= 0 && attr1 <= maxValue,
-      attr2 >= 0 && attr2 <= maxValue,
-      attr3 >= 0 && attr3 <= maxValue,
-      Number(attr1) + Number(attr2) + Number(attr3) <= maxSum,
+      cardName.length > 0,
+      cardDescription.length > 0,
+      cardImage.length > 0,
+      cardAttr1 >= 0 && cardAttr1 <= maxValue,
+      cardAttr2 >= 0 && cardAttr2 <= maxValue,
+      cardAttr3 >= 0 && cardAttr3 <= maxValue,
+      Number(cardAttr1) + Number(cardAttr2) + Number(cardAttr3) <= maxSum,
     ];
     this.setState({ isSaveButtonDisabled: !conditions.every((con) => con) });
   }
 
   render() {
+    const { cardCollection } = this.state;
     return (
       <div className="App">
         <h1>Tryunfo</h1>
-        <div className="homepage">
+        <div className="new-card-area">
           <Form
             { ...this.state }
             onInputChange={ this.onInputChange }
             onSaveButtonClick={ this.onSaveButtonClick }
-            validateInfo={ this.checkCardInformations }
           />
           <Card { ...this.state } />
+        </div>
+        <div className="cards-list">
+          { cardCollection.map((card) => (
+            <Card key={ card.cardName } { ...card } />
+          ))}
         </div>
       </div>
     );
