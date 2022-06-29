@@ -19,7 +19,6 @@ class App extends React.Component {
     super();
     this.state = {
       ...INITIAL_STATE,
-      hasTrunfo: false,
       cardCollection: [],
     };
 
@@ -36,8 +35,8 @@ class App extends React.Component {
 
   onSaveButtonClick() {
     const {
-      cardName, cardDescription, cardAttr1, cardAttr2,
-      cardAttr3, cardImage, cardRare, cardTrunfo, hasTrunfo,
+      cardName, cardDescription, cardAttr1,
+      cardAttr2, cardAttr3, cardImage, cardRare, cardTrunfo,
     } = this.state;
     const cardInfo = {
       cardName,
@@ -49,7 +48,6 @@ class App extends React.Component {
       cardRare,
       cardTrunfo,
     };
-    if (!hasTrunfo) this.setState({ hasTrunfo: cardTrunfo });
     this.setState((prevState) => ({
       ...INITIAL_STATE,
       cardCollection: [...prevState.cardCollection, cardInfo],
