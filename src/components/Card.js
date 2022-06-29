@@ -1,41 +1,42 @@
 import React from 'react';
-import propTypes from 'prop-types';
-/* import Form from './Form'; */
+import PropTypes from 'prop-types';
 
 class Card extends React.Component {
   render() {
     const {
-      cardName, cardDescription, cardAttr1, cardAttr2, cardAttr3,
-      cardImage, cardRare, cardTrunfo,
+      name, description, attr1, attr2, attr3,
+      image, rare, trunfo,
     } = this.props;
     return (
-
-      <section className="card">
-        <p data-testid="name-card">
-          {' '}
-          {cardName}
-        </p>
-        <img src={ cardImage } alt={ cardName } data-testid="image-card" />
-        <p data-testid="description-card">{cardDescription}</p>
-        <p data-testid="attr1-card">{cardAttr1}</p>
-        <p data-testid="attr2-card">{cardAttr2}</p>
-        <p data-testid="attr3-card">{cardAttr3}</p>
-        <p data-testid="rare-card">{cardRare}</p>
-        {cardTrunfo ? <p data-testid="trunfo-card">Super Trunfo </p> : <p>vazio</p> }
-      </section>
-
+      <div className="card">
+        <div><h2 data-testid="name-card">{ name }</h2></div>
+        <div>
+          <img data-testid="image-card" src={ image } alt={ name } />
+        </div>
+        <div><p data-testid="description-card">{ description }</p></div>
+        <div>
+          <div><p data-testid="attr1-card">{ attr1 }</p></div>
+          <div><p data-testid="attr2-card">{ attr2 }</p></div>
+          <div><p data-testid="attr3-card">{ attr3 }</p></div>
+        </div>
+        <div><h4 data-testid="rare-card">{ rare }</h4></div>
+        { trunfo && (
+          <div><p data-testid="trunfo-card">Super Trunfo</p></div>
+        ) }
+      </div>
     );
   }
 }
+
 Card.propTypes = {
-  cardName: propTypes.string,
-  cardDescription: propTypes.string,
-  cardAttr1: propTypes.string,
-  cardAttr2: propTypes.string,
-  cardAttr3: propTypes.string,
-  cardImage: propTypes.string,
-  cardRare: propTypes.string,
-  cardTrunfo: propTypes.bool,
-}.isRequired;
+  name: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  attr1: PropTypes.string.isRequired,
+  attr2: PropTypes.string.isRequired,
+  attr3: PropTypes.string.isRequired,
+  image: PropTypes.string.isRequired,
+  rare: PropTypes.string.isRequired,
+  trunfo: PropTypes.bool.isRequired,
+};
 
 export default Card;

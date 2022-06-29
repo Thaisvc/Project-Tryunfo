@@ -2,97 +2,84 @@ import React from 'react';
 import Form from './components/Form';
 import Card from './components/Card';
 
+const INITIAL_STATE = {
+  name: '',
+  description: '',
+  attr1: '0',
+  attr2: '0',
+  attr3: '0',
+  image: '',
+  rare: 'normal',
+  trunfo: false,
+  isSaveButtonDisabled: true,
+};
+
 class App extends React.Component {
   constructor() {
     super();
-
     this.state = {
-      cardName: '',
-      cardDescription: '',
-      cardImage: '',
-      cardAttr1: '',
-      cardAttr2: '',
-      cardAttr3: '',
-      cardRare: 'normal',
-      cardTrunfo: false,
-      hasTrunfo: false,
-      isSaveButtonDisabled: true,
+      ...INITIAL_STATE,
+      cardCollection: [],
     };
+
     this.onInputChange = this.onInputChange.bind(this);
-    this.checkedForms = this.checkedForms.bind(this);
+    this.onSaveButtonClick = this.onSaveButtonClick.bind(this);
+    this.checkCardInformations = this.checkCardInformations.bind(this);
   }
 
-  onInputChange = ({ target }, InfoValidate) => {
+  onInputChange({ target }, validateInfo) {
     const { name } = target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
-
-    this.setState({
-      [name]: value },
-    () => InfoValidate());
+    this.setState({ [name]: value }, () => validateInfo());
   }
 
-  checkedForms() {
+  onSaveButtonClick() {
     const {
-      cardName, cardDescription, cardAttr1,
-      cardAttr2, cardAttr3, cardImage,
+      name, description, attr1,
+      attr2, attr3, image, trunfo,
     } = this.state;
+    const cardInfo = {
+      name, description, attr1, attr2, attr3, image, trunfo,
+    };
+    this.setState((prevState) => ({
+      ...INITIAL_STATE,
+      cardCollection: [...prevState.cardCollection, cardInfo],
+    }));
+  }
 
-    const Value = 90;
-    const sum = 210;
-
+  checkCardInformations() {
+    const {
+      name, description, attr1,
+      attr2, attr3, image,
+    } = this.state;
+    const maxValue = 90;
+    const maxSum = 210;
     const conditions = [
-      cardName.length > 0,
-      cardDescription.length > 0,
-      cardImage.length > 0,
-      cardAttr1 >= 0 && cardAttr1 <= Value,
-      cardAttr2 >= 0 && cardAttr2 <= Value,
-      cardAttr3 >= 0 && cardAttr3 <= Value,
-      Number(cardAttr1) + Number(cardAttr2) + Number(cardAttr3) <= sum,
+      name.length > 0,
+      description.length > 0,
+      image.length > 0,
+      attr1 >= 0 && attr1 <= maxValue,
+      attr2 >= 0 && attr2 <= maxValue,
+      attr3 >= 0 && attr3 <= maxValue,
+      Number(attr1) + Number(attr2) + Number(attr3) <= maxSum,
     ];
-    // https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Array/every
-    this.setState({ isSaveButtonDisabled: !conditions.every((condition) => condition) });
+    this.setState({ isSaveButtonDisabled: !conditions.every((con) => con) });
   }
 
   render() {
-    const { cardName,
-      cardImage,
-      cardDescription,
-      cardRare,
-      cardAttr1,
-      cardAttr2,
-      cardAttr3,
-      cardTrunfo,
-      hasTrunfo,
-      isSaveButtonDisabled } = this.state;
     return (
-      <>
+      <div className="App">
         <h1>Tryunfo</h1>
-        <Form
-          onSaveButtonClick={ this.callback }
-          onInputChange={ this.onInputChange }
-          cardName={ cardName }
-          cardDescription={ cardDescription }
-          cardAttr1={ cardAttr1 }
-          cardAttr2={ cardAttr2 }
-          cardAttr3={ cardAttr3 }
-          cardImage={ cardImage }
-          cardRare={ cardRare }
-          hasTrunfo={ hasTrunfo }
-          cardTrunfo={ cardTrunfo }
-          isSaveButtonDisabled={ isSaveButtonDisabled }
-          InfoValidate={ this.checkedForms }
-        />
-        <Card
-          cardName={ cardName }
-          cardDescription={ cardDescription }
-          cardAttr1={ cardAttr1 }
-          cardAttr2={ cardAttr2 }
-          cardAttr3={ cardAttr3 }
-          cardImage={ cardImage }
-          cardRare={ cardRare }
-          cardTrunfo={ cardTrunfo }
-        />
-      </>
+        <div className="homepage">
+          <Form
+            { ...this.state }
+            onInputChange={ this.onInputChange }
+            onSaveButtonClick={ this.onSaveButtonClick }
+            validateInfo={ this.checkCardInformations }
+          />
+          <Card { ...this.state } />
+        </div>
+      </div>
     );
   }
 }
