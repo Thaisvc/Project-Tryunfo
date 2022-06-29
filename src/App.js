@@ -62,6 +62,7 @@ class App extends React.Component {
       cardName, cardDescription, cardImage,
       cardAttr1, cardAttr2, cardAttr3,
     } = this.state;
+
     const maxValue = 90;
     const maxSum = 210;
     const conditions = [
