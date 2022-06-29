@@ -19,12 +19,14 @@ class App extends React.Component {
     super();
     this.state = {
       ...INITIAL_STATE,
+      hasTrunfo: false,
       cardCollection: [],
     };
 
     this.onInputChange = this.onInputChange.bind(this);
     this.onSaveButtonClick = this.onSaveButtonClick.bind(this);
     this.validateCard = this.validateCard.bind(this);
+    this.removeCard = this.removeCard.bind(this);
   }
 
   onInputChange({ target }) {
@@ -35,8 +37,8 @@ class App extends React.Component {
 
   onSaveButtonClick() {
     const {
-      cardName, cardDescription, cardAttr1,
-      cardAttr2, cardAttr3, cardImage, cardRare, cardTrunfo,
+      cardName, cardDescription, cardAttr1, cardAttr2,
+      cardAttr3, cardImage, cardRare, cardTrunfo, hasTrunfo,
     } = this.state;
     const cardInfo = {
       cardName,
@@ -48,6 +50,7 @@ class App extends React.Component {
       cardRare,
       cardTrunfo,
     };
+    if (!hasTrunfo) this.setState({ hasTrunfo: cardTrunfo });
     this.setState((prevState) => ({
       ...INITIAL_STATE,
       cardCollection: [...prevState.cardCollection, cardInfo],
@@ -73,6 +76,16 @@ class App extends React.Component {
     this.setState({ isSaveButtonDisabled: !conditions.every((con) => con) });
   }
 
+  removeCard({ target }) {
+    const { cardCollection } = this.state;
+    this.setState({
+      cardCollection: cardCollection
+        .filter(({ cardName }) => cardName !== target.id),
+      hasTrunfo: !cardCollection
+        .find(({ cardName }) => cardName === target.id).cardTrunfo,
+    });
+  }
+
   render() {
     const { cardCollection } = this.state;
     return (
@@ -88,7 +101,17 @@ class App extends React.Component {
         </div>
         <div className="cards-list">
           { cardCollection.map((card) => (
-            <Card key={ card.cardName } { ...card } />
+            <div key={ card.cardName } className="card">
+              <Card { ...card } />
+              <button
+                id={ card.cardName }
+                type="button"
+                data-testid="delete-button"
+                onClick={ this.removeCard }
+              >
+                Excluir
+              </button>
+            </div>
           ))}
         </div>
       </div>
